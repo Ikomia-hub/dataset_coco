@@ -39,7 +39,7 @@ class COCO_DatasetProcess(core.CProtocolTask):
     def __init__(self, name, param):
         core.CProtocolTask.__init__(self, name)
         # Add input/output of the process here
-        self.addOutput(datasetio.IkDatasetIO(dataprocess.DatasetFormat.COCO))
+        self.addOutput(datasetio.IkDatasetIO("coco"))
         self.addOutput(dataprocess.CDblFeatureIO())
 
         # Create parameters class
@@ -107,7 +107,7 @@ class COCO_DatasetProcessFactory(dataprocess.CProcessFactory):
         # relative path -> as displayed in Ikomia application process tree
         self.info.path = "Plugins/Python/Dataset"
         self.info.iconPath = "icons/coco.jpg"
-        self.info.version = "1.0.0"
+        self.info.version = "1.1.0"
         self.info.keywords = "coco,dataset,annotation,json,train,dnn"
 
     def create(self, param=None):
