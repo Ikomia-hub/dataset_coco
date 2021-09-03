@@ -1,5 +1,6 @@
 from ikomia import utils, core, dataprocess
-import COCO_Dataset_process as processMod
+from ikomia.utils import pyqtutils, qtconversion
+from COCO_Dataset.COCO_Dataset_process import COCO_DatasetParam
 # PyQt GUI framework
 from PyQt5.QtWidgets import *
 
@@ -8,28 +9,28 @@ from PyQt5.QtWidgets import *
 # - Class which implements widget associated with the process
 # - Inherits core.CProtocolTaskWidget from Ikomia API
 # --------------------
-class COCO_DatasetWidget(core.CProtocolTaskWidget):
+class COCO_DatasetWidget(core.CWorkflowTaskWidget):
 
     def __init__(self, param, parent):
-        core.CProtocolTaskWidget.__init__(self, parent)
+        core.CWorkflowTaskWidget.__init__(self, parent)
 
         if param is None:
-            self.parameters = processMod.COCO_DatasetParam()
+            self.parameters = COCO_DatasetParam()
         else:
             self.parameters = param
 
         # Create layout : QGridLayout by default
         self.grid_layout = QGridLayout()
 
-        self.browse_json = utils.append_browse_file(self.grid_layout, label="COCO json file",
+        self.browse_json = pyqtutils.append_browse_file(self.grid_layout, label="COCO json file",
                                                    path=self.parameters.json_path, filter="*.json")
 
-        self.browse_img_folder = utils.append_browse_file(self.grid_layout, label="Image folder", filter="",
+        self.browse_img_folder = pyqtutils.append_browse_file(self.grid_layout, label="Image folder", filter="",
                                                          path=self.parameters.image_folder,
                                                          mode=QFileDialog.Directory)
 
         # PyQt -> Qt wrapping
-        layout_ptr = utils.PyQtToQt(self.grid_layout)
+        layout_ptr = qtconversion.PyQtToQt(self.grid_layout)
 
         # Set widget layout
         self.setLayout(layout_ptr)

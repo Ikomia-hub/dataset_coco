@@ -1,6 +1,4 @@
 from ikomia import dataprocess
-import COCO_Dataset_process as processMod
-import COCO_Dataset_widget as widgetMod
 
 
 # --------------------
@@ -13,9 +11,11 @@ class COCO_Dataset(dataprocess.CPluginProcessInterface):
         dataprocess.CPluginProcessInterface.__init__(self)
 
     def getProcessFactory(self):
+        from COCO_Dataset.COCO_Dataset_process import COCO_DatasetProcessFactory
         # Instantiate process object
-        return processMod.COCO_DatasetProcessFactory()
+        return COCO_DatasetProcessFactory()
 
     def getWidgetFactory(self):
+        from COCO_Dataset.COCO_Dataset_widget import COCO_DatasetWidgetFactory
         # Instantiate associated widget object
-        return widgetMod.COCO_DatasetWidgetFactory()
+        return COCO_DatasetWidgetFactory()

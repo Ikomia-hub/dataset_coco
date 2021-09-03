@@ -1,46 +1,45 @@
 from ikomia import core, dataprocess
 from ikomia.dnn import dataset, datasetio
 import copy
-# Your imports below
 
 # --------------------
 # - Class to handle the process parameters
 # - Inherits core.CProtocolTaskParam from Ikomia API
 # --------------------
-class COCO_DatasetParam(core.CProtocolTaskParam):
+class COCO_DatasetParam(core.CWorkflowTaskParam):
 
     def __init__(self):
-        core.CProtocolTaskParam.__init__(self)
+        core.CWorkflowTaskParam.__init__(self)
         # Place default value initialization here
         self.json_path = ""
         self.image_folder = ""
 
-    def setParamMap(self, paramMap):
+    def setParamMap(self, param_map):
         # Set parameters values from Ikomia application
         # Parameters values are stored as string and accessible like a python dict
-        self.json_path = paramMap["json_path"]
-        self.image_folder = paramMap["image_folder"]
+        self.json_path = param_map["json_path"]
+        self.image_folder = param_map["image_folder"]
 
     def getParamMap(self):
         # Send parameters values to Ikomia application
         # Create the specific dict structure (string container)
-        paramMap = core.ParamMap()
-        paramMap["json_path"] = self.json_path
-        paramMap["image_folder"] = self.image_folder
-        return paramMap
+        param_map = core.ParamMap()
+        param_map["json_path"] = self.json_path
+        param_map["image_folder"] = self.image_folder
+        return param_map
 
 
 # --------------------
 # - Class which implements the process
 # - Inherits core.CProtocolTask or derived from Ikomia API
 # --------------------
-class COCO_DatasetProcess(core.CProtocolTask):
+class COCO_DatasetProcess(core.CWorkflowTask):
 
     def __init__(self, name, param):
         core.CProtocolTask.__init__(self, name)
         # Add input/output of the process here
         self.addOutput(datasetio.IkDatasetIO("coco"))
-        self.addOutput(dataprocess.CDblFeatureIO())
+        self.addOutput(dataprocess.CNumericIO())
 
         # Create parameters class
         if param is None:
@@ -88,10 +87,10 @@ class COCO_DatasetProcess(core.CProtocolTask):
 # - Factory class to build process object
 # - Inherits dataprocess.CProcessFactory from Ikomia API
 # --------------------
-class COCO_DatasetProcessFactory(dataprocess.CProcessFactory):
+class COCO_DatasetProcessFactory(dataprocess.CTaskFactory):
 
     def __init__(self):
-        dataprocess.CProcessFactory.__init__(self)
+        dataprocess.CTaskFactory.__init__(self)
         # Set process information as string here
         self.info.name = "COCO_Dataset"
         self.info.shortDescription = "Load COCO 2017 dataset"
