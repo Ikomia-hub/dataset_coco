@@ -36,7 +36,7 @@ class COCO_DatasetParam(core.CWorkflowTaskParam):
 class COCO_DatasetProcess(core.CWorkflowTask):
 
     def __init__(self, name, param):
-        core.CProtocolTask.__init__(self, name)
+        core.CWorkflowTask.__init__(self, name)
         # Add input/output of the process here
         self.addOutput(datasetio.IkDatasetIO("coco"))
         self.addOutput(dataprocess.CNumericIO())
