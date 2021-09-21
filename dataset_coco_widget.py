@@ -1,6 +1,24 @@
+# Copyright (C) 2021 Ikomia SAS
+# Contact: https://www.ikomia.com
+#
+# This file is part of the IkomiaStudio software.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 from ikomia import utils, core, dataprocess
 from ikomia.utils import pyqtutils, qtconversion
-from COCO_Dataset.COCO_Dataset_process import COCO_DatasetParam
+from dataset_coco.dataset_coco_process import DatasetCocoParam
 # PyQt GUI framework
 from PyQt5.QtWidgets import *
 
@@ -9,13 +27,13 @@ from PyQt5.QtWidgets import *
 # - Class which implements widget associated with the process
 # - Inherits core.CProtocolTaskWidget from Ikomia API
 # --------------------
-class COCO_DatasetWidget(core.CWorkflowTaskWidget):
+class DatasetCocoWidget(core.CWorkflowTaskWidget):
 
     def __init__(self, param, parent):
         core.CWorkflowTaskWidget.__init__(self, parent)
 
         if param is None:
-            self.parameters = COCO_DatasetParam()
+            self.parameters = DatasetCocoParam()
         else:
             self.parameters = param
 
@@ -23,11 +41,11 @@ class COCO_DatasetWidget(core.CWorkflowTaskWidget):
         self.grid_layout = QGridLayout()
 
         self.browse_json = pyqtutils.append_browse_file(self.grid_layout, label="COCO json file",
-                                                   path=self.parameters.json_path, filter="*.json")
+                                                        path=self.parameters.json_path, filter="*.json")
 
         self.browse_img_folder = pyqtutils.append_browse_file(self.grid_layout, label="Image folder", filter="",
-                                                         path=self.parameters.image_folder,
-                                                         mode=QFileDialog.Directory)
+                                                              path=self.parameters.image_folder,
+                                                              mode=QFileDialog.Directory)
 
         # PyQt -> Qt wrapping
         layout_ptr = qtconversion.PyQtToQt(self.grid_layout)
@@ -49,13 +67,13 @@ class COCO_DatasetWidget(core.CWorkflowTaskWidget):
 # - Factory class to build process widget object
 # - Inherits dataprocess.CWidgetFactory from Ikomia API
 # --------------------
-class COCO_DatasetWidgetFactory(dataprocess.CWidgetFactory):
+class DatasetCocoWidgetFactory(dataprocess.CWidgetFactory):
 
     def __init__(self):
         dataprocess.CWidgetFactory.__init__(self)
         # Set the name of the process -> it must be the same as the one declared in the process factory class
-        self.name = "COCO_Dataset"
+        self.name = "dataset_coco"
 
     def create(self, param):
         # Create widget object
-        return COCO_DatasetWidget(param, None)
+        return DatasetCocoWidget(param, None)
