@@ -46,6 +46,15 @@ class DatasetCocoWidget(core.CWorkflowTaskWidget):
         self.browse_img_folder = pyqtutils.append_browse_file(self.grid_layout, label="Image folder", filter="",
                                                               path=self.parameters.image_folder,
                                                               mode=QFileDialog.Directory)
+        self.combo_task = pyqtutils.append_combo(self.grid_layout, "Task")
+        self.combo_task.addItems(["detection", "instance_segmentation", "semantic_segmentation", "keypoints"])
+        self.combo_task.setCurrentText(self.parameters.task)
+        self.browse_output_folder = pyqtutils.append_browse_file(self.grid_layout, label="Output folder "
+                                                                                         "(sem. segm.)", filter="",
+                                                                 path=self.parameters.output_folder,
+                                                                 mode=QFileDialog.Directory)
+        self.combo_task.currentTextChanged.connect(self.on_combo_task_changed)
+        self.browse_output_folder.setVisible(self.combo_task.currentText() == "semantic_segmentation")
 
         # PyQt -> Qt wrapping
         layout_ptr = qtconversion.PyQtToQt(self.grid_layout)
@@ -53,11 +62,16 @@ class DatasetCocoWidget(core.CWorkflowTaskWidget):
         # Set widget layout
         self.setLayout(layout_ptr)
 
+    def on_combo_task_changed(self, s):
+        self.browse_output_folder.setVisible(self.combo_task.currentText() == "semantic_segmentation")
+
     def onApply(self):
         # Apply button clicked slot
         # Get parameters from widget
         self.parameters.json_path = self.browse_json.path
         self.parameters.image_folder = self.browse_img_folder.path
+        self.parameters.task = self.combo_task.currentText()
+        self.parameters.output_folder = self.browse_output_folder.path
 
         # Send signal to launch the process
         self.emitApply(self.parameters)

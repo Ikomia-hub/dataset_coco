@@ -31,12 +31,16 @@ class DatasetCocoParam(core.CWorkflowTaskParam):
         # Place default value initialization here
         self.json_path = ""
         self.image_folder = ""
+        self.task = "instance_segmentation"
+        self.output_folder = ""
 
     def setParamMap(self, param_map):
         # Set parameters values from Ikomia application
         # Parameters values are stored as string and accessible like a python dict
         self.json_path = param_map["json_path"]
         self.image_folder = param_map["image_folder"]
+        self.task = param_map["task"]
+        self.output_folder = param_map["output_folder"]
 
     def getParamMap(self):
         # Send parameters values to Ikomia application
@@ -44,6 +48,8 @@ class DatasetCocoParam(core.CWorkflowTaskParam):
         param_map = core.ParamMap()
         param_map["json_path"] = self.json_path
         param_map["image_folder"] = self.image_folder
+        param_map["task"] = self.task
+        param_map["output_folder"] = self.output_folder
         return param_map
 
 
@@ -80,7 +86,7 @@ class DatasetCoco(core.CWorkflowTask):
 
         # Get dataset output :
         output = self.getOutput(0)
-        output.data = dataset.load_coco_dataset(param.json_path, param.image_folder)
+        output.data = dataset.load_coco_dataset(param.json_path, param.image_folder, param.task, param.output_folder)
         output.has_bckgnd_class = True
 
         # Class labels output
@@ -124,7 +130,7 @@ class DatasetCocoFactory(dataprocess.CTaskFactory):
         # relative path -> as displayed in Ikomia application process tree
         self.info.path = "Plugins/Python/Dataset"
         self.info.iconPath = "icons/coco.jpg"
-        self.info.version = "1.1.0"
+        self.info.version = "1.2.0"
         self.info.keywords = "coco,dataset,annotation,json,train,dnn"
 
     def create(self, param=None):
