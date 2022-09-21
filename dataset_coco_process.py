@@ -87,7 +87,7 @@ class DatasetCoco(core.CWorkflowTask):
         # Get dataset output :
         output = self.getOutput(0)
         output.data = dataset.load_coco_dataset(param.json_path, param.image_folder, param.task, param.output_folder)
-        output.has_bckgnd_class = True
+        output.has_bckgnd_class = param.task == "semantic_segmentation"
 
         # Class labels output
         numeric_out = self.getOutput(1)
