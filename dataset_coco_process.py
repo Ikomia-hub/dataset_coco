@@ -130,7 +130,7 @@ class DatasetCocoFactory(dataprocess.CTaskFactory):
         # relative path -> as displayed in Ikomia application process tree
         self.info.path = "Plugins/Python/Dataset"
         self.info.iconPath = "icons/coco.jpg"
-        self.info.version = "1.2.0"
+        self.info.version = "1.2.1"
         self.info.keywords = "coco,dataset,annotation,json,train,dnn"
 
     def create(self, param=None):
