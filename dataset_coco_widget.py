@@ -60,12 +60,12 @@ class DatasetCocoWidget(core.CWorkflowTaskWidget):
         layout_ptr = qtconversion.PyQtToQt(self.grid_layout)
 
         # Set widget layout
-        self.setLayout(layout_ptr)
+        self.set_layout(layout_ptr)
 
     def on_combo_task_changed(self, s):
         self.browse_output_folder.setVisible(self.combo_task.currentText() == "semantic_segmentation")
 
-    def onApply(self):
+    def on_apply(self):
         # Apply button clicked slot
         # Get parameters from widget
         self.parameters.json_path = self.browse_json.path
@@ -74,7 +74,7 @@ class DatasetCocoWidget(core.CWorkflowTaskWidget):
         self.parameters.output_folder = self.browse_output_folder.path
 
         # Send signal to launch the process
-        self.emitApply(self.parameters)
+        self.emit_apply(self.parameters)
 
 
 # --------------------

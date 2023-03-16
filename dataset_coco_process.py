@@ -34,7 +34,7 @@ class DatasetCocoParam(core.CWorkflowTaskParam):
         self.task = "instance_segmentation"
         self.output_folder = ""
 
-    def setParamMap(self, param_map):
+    def set_values(self, param_map):
         # Set parameters values from Ikomia application
         # Parameters values are stored as string and accessible like a python dict
         self.json_path = param_map["json_path"]
@@ -42,14 +42,13 @@ class DatasetCocoParam(core.CWorkflowTaskParam):
         self.task = param_map["task"]
         self.output_folder = param_map["output_folder"]
 
-    def getParamMap(self):
+    def get_values(self):
         # Send parameters values to Ikomia application
         # Create the specific dict structure (string container)
-        param_map = core.ParamMap()
-        param_map["json_path"] = self.json_path
-        param_map["image_folder"] = self.image_folder
-        param_map["task"] = self.task
-        param_map["output_folder"] = self.output_folder
+        param_map = {"json_path": self.json_path,
+                     "image_folder": self.image_folder,
+                     "task": self.task,
+                     "output_folder": self.output_folder}
         return param_map
 
 
@@ -62,16 +61,16 @@ class DatasetCoco(core.CWorkflowTask):
     def __init__(self, name, param):
         core.CWorkflowTask.__init__(self, name)
         # Add input/output of the process here
-        self.addOutput(datasetio.IkDatasetIO("coco"))
-        self.addOutput(dataprocess.CNumericIO())
+        self.add_output(datasetio.IkDatasetIO("coco"))
+        self.add_output(dataprocess.CNumericIO())
 
         # Create parameters class
         if param is None:
-            self.setParam(DatasetCocoParam())
+            self.set_param_object(DatasetCocoParam())
         else:
-            self.setParam(copy.deepcopy(param))
+            self.set_param_object(copy.deepcopy(param))
 
-    def getProgressSteps(self):
+    def get_progress_steps(self):
         # Function returning the number of progress steps for this process
         # This is handled by the main progress bar of Ikomia application
         return 1
@@ -79,32 +78,32 @@ class DatasetCoco(core.CWorkflowTask):
     def run(self):
         # Core function of your process
         # Call beginTaskRun for initialization
-        self.beginTaskRun()
+        self.begin_task_run()
 
         # Get parameters :
-        param = self.getParam()
+        param = self.get_param_object()
 
         # Get dataset output :
-        output = self.getOutput(0)
+        output = self.get_output(0)
         output.data = dataset.load_coco_dataset(param.json_path, param.image_folder, param.task, param.output_folder)
         output.has_bckgnd_class = param.task == "semantic_segmentation"
 
         # Class labels output
-        numeric_out = self.getOutput(1)
-        numeric_out.clearData()
-        numeric_out.setOutputType(dataprocess.NumericOutputType.TABLE)
+        numeric_out = self.get_output(1)
+        numeric_out.clear_data()
+        numeric_out.set_output_type(dataprocess.NumericOutputType.TABLE)
 
         class_ids = []
         for i in range(len(output.data["metadata"]["category_names"])):
             class_ids.append(i)
 
-        numeric_out.addValueList(class_ids, "Id", list(output.data["metadata"]["category_names"].values()))
+        numeric_out.add_value_list(class_ids, "Id", list(output.data["metadata"]["category_names"].values()))
 
         # Step progress bar:
-        self.emitStepProgress()
+        self.emit_step_progress()
 
         # Call endTaskRun to finalize process
-        self.endTaskRun()
+        self.end_task_run()
 
 
 # --------------------
@@ -117,7 +116,7 @@ class DatasetCocoFactory(dataprocess.CTaskFactory):
         dataprocess.CTaskFactory.__init__(self)
         # Set process information as string here
         self.info.name = "dataset_coco"
-        self.info.shortDescription = "Load COCO 2017 dataset"
+        self.info.short_description = "Load COCO 2017 dataset"
         self.info.description = "Load COCO 2017 dataset. " \
                                 "This plugin converts a given dataset in COCO 2017 format to Ikomia format. " \
                                 "Once loaded, all images can be visualized with their respective annotations. " \
@@ -125,11 +124,11 @@ class DatasetCocoFactory(dataprocess.CTaskFactory):
                                 "to this converter."
         self.info.authors = "Ikomia team"
         self.info.license = "MIT License"
-        self.info.documentationLink = "https://cocodataset.org/"
+        self.info.documentation_link = "https://cocodataset.org/"
         self.info.repo = "https://github.com/Ikomia-dev"
         # relative path -> as displayed in Ikomia application process tree
         self.info.path = "Plugins/Python/Dataset"
-        self.info.iconPath = "icons/coco.jpg"
+        self.info.icon_path = "icons/coco.jpg"
         self.info.version = "1.2.1"
         self.info.keywords = "coco,dataset,annotation,json,train,dnn"
 
