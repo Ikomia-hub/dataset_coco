@@ -19,6 +19,7 @@
 from ikomia import core, dataprocess
 from ikomia.dnn import dataset, datasetio
 import copy
+import os
 
 # --------------------
 # - Class to handle the process parameters
@@ -83,9 +84,24 @@ class DatasetCoco(core.CWorkflowTask):
         # Get parameters :
         param = self.get_param_object()
 
+        # Set output folder:
+        if param.task == "semantic_segmentation":
+            if param.output_folder == "":
+                param.output_folder =  os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                         "mask_semantic_seg")
+                os.makedirs(param.output_folder, exist_ok=True)
+            if param.output_folder != "":
+                if not os.path.exists(param.output_folder):
+                    os.makedirs(param.output_folder)
+
         # Get dataset output :
         output = self.get_output(0)
-        output.data = dataset.load_coco_dataset(param.json_path, param.image_folder, param.task, param.output_folder)
+        output.data = dataset.load_coco_dataset(
+                                            param.json_path,
+                                            param.image_folder,
+                                            param.task,
+                                            param.output_folder
+                                            )
         output.has_bckgnd_class = param.task == "semantic_segmentation"
 
         # Class labels output
@@ -97,7 +113,11 @@ class DatasetCoco(core.CWorkflowTask):
         for i in range(len(output.data["metadata"]["category_names"])):
             class_ids.append(i)
 
-        numeric_out.add_value_list(class_ids, "Id", list(output.data["metadata"]["category_names"].values()))
+        numeric_out.add_value_list(
+                            class_ids,
+                            "Id",
+                            list(output.data["metadata"]["category_names"].values())
+                            )
 
         # Step progress bar:
         self.emit_step_progress()
