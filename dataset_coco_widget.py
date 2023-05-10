@@ -41,7 +41,7 @@ class DatasetCocoWidget(core.CWorkflowTaskWidget):
         self.grid_layout = QGridLayout()
 
         self.browse_json = pyqtutils.append_browse_file(self.grid_layout, label="COCO json file",
-                                                        path=self.parameters.json_path, filter="*.json")
+                                                        path=self.parameters.json_file, filter="*.json")
 
         self.browse_img_folder = pyqtutils.append_browse_file(self.grid_layout, label="Image folder", filter="",
                                                               path=self.parameters.image_folder,
@@ -68,7 +68,7 @@ class DatasetCocoWidget(core.CWorkflowTaskWidget):
     def on_apply(self):
         # Apply button clicked slot
         # Get parameters from widget
-        self.parameters.json_path = self.browse_json.path
+        self.parameters.json_file = self.browse_json.path
         self.parameters.image_folder = self.browse_img_folder.path
         self.parameters.task = self.combo_task.currentText()
         self.parameters.output_folder = self.browse_output_folder.path

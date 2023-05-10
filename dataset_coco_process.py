@@ -30,7 +30,7 @@ class DatasetCocoParam(core.CWorkflowTaskParam):
     def __init__(self):
         core.CWorkflowTaskParam.__init__(self)
         # Place default value initialization here
-        self.json_path = ""
+        self.json_file = ""
         self.image_folder = ""
         self.task = "instance_segmentation"
         self.output_folder = ""
@@ -38,7 +38,7 @@ class DatasetCocoParam(core.CWorkflowTaskParam):
     def set_values(self, param_map):
         # Set parameters values from Ikomia application
         # Parameters values are stored as string and accessible like a python dict
-        self.json_path = param_map["json_path"]
+        self.json_file = param_map["json_file"]
         self.image_folder = param_map["image_folder"]
         self.task = param_map["task"]
         self.output_folder = param_map["output_folder"]
@@ -46,7 +46,7 @@ class DatasetCocoParam(core.CWorkflowTaskParam):
     def get_values(self):
         # Send parameters values to Ikomia application
         # Create the specific dict structure (string container)
-        param_map = {"json_path": self.json_path,
+        param_map = {"json_file": self.json_file,
                      "image_folder": self.image_folder,
                      "task": self.task,
                      "output_folder": self.output_folder}
@@ -97,7 +97,7 @@ class DatasetCoco(core.CWorkflowTask):
         # Get dataset output :
         output = self.get_output(0)
         output.data = dataset.load_coco_dataset(
-                                            param.json_path,
+                                            param.json_file,
                                             param.image_folder,
                                             param.task,
                                             param.output_folder
