@@ -19,10 +19,9 @@
     </a> 
 </p>
 
-Load COCO 2017 dataset. This plugin converts a given dataset in COCO 2017 format to Ikomia format. Once loaded, all images can be visualized with their respective annotations. Then, any training algorithms from the Ikomia marketplace can be connected to this converter.
+Load any dataset in COCO format to Ikomia format. Then, any training algorithms from the Ikomia marketplace can be connected to this converter.
 
-[Insert illustrative image here. Image must be accessible publicly, in algorithm Github repository for example.
-<img src="images/illustration.png"  alt="Illustrative image" width="30%" height="30%">]
+![Coco examples](https://cocodataset.org/images/coco-examples.jpg)
 
 ## :rocket: Use with Ikomia API
 
@@ -36,20 +35,25 @@ pip install ikomia
 
 #### 2. Create your workflow
 
-[Change the sample image URL to fit algorithm purpose]
 
 ```python
-import ikomia
 from ikomia.dataprocess.workflow import Workflow
 
 # Init your workflow
 wf = Workflow()
 
 # Add algorithm
-algo = wf.add_task(name="dataset_coco", auto_connect=True)
+algo = wf.add_task(name="dataset_coco", auto_connect=False)
 
-# Run on your image  
-wf.run_on(url="example_image.png")
+algo.set_parameters({"json_file": "path/to/annotations_file.json",
+                     "image_folder": "path/to/image_folder",
+                     "task": "detection"})
+
+# Add your training algorithm. Choose it accordingly to the "task" parameter
+train = wf.add_task(name="train_yolo_v8", auto_connect=True)
+
+# Start training  
+wf.run()
 ```
 
 ## :sunny: Use with Ikomia Studio
@@ -62,12 +66,19 @@ Ikomia Studio offers a friendly UI with the same features as the API.
 
 ## :pencil: Set algorithm parameters
 
-[Explain each algorithm parameters]
+- **json_file** (str): Annotation file (.json) in COCO format. See [this page](https://cocodataset.org/#format-data) for
+more information about the COCO format.
+- **image_folder** (str): Folder containing images annotated in the annotation file.
+- **task** (str) - Default "detection": Task of the dataset. It should be one of : "detection", "instance_segmentation",
+"semantic_segmentation" or "keypoints".
+- **output_folder** (str) - Default "": Only needed when task=="semantic_segmentation". COCO format does not support 
+semantic segmentation so we need to compute semantic segmentation masks from instance segmentation masks, and store the 
+computed masks in a folder determined by this parameter.
 
-[Change the sample image URL to fit algorithm purpose]
+
+**Parameters** should be in **strings format**  when added to the dictionary.
 
 ```python
-import ikomia
 from ikomia.dataprocess.workflow import Workflow
 
 # Init your workflow
@@ -76,42 +87,10 @@ wf = Workflow()
 # Add algorithm
 algo = wf.add_task(name="dataset_coco", auto_connect=True)
 
-algo.set_parameters({
-    "param1": "value1",
-    "param2": "value2",
-    ...
-})
-
-# Run on your image  
-wf.run_on(url="example_image.png")
+algo.set_parameters({"json_file": "path/to/annotations_file.json",
+                     "image_folder": "path/to/image_folder",
+                     "task": "detection",
+                     "output_folder": ""})
 
 ```
 
-## :mag: Explore algorithm outputs
-
-Every algorithm produces specific outputs, yet they can be explored them the same way using the Ikomia API. For a more in-depth understanding of managing algorithm outputs, please refer to the [documentation](https://ikomia-dev.github.io/python-api-documentation/advanced_guide/IO_management.html).
-
-```python
-import ikomia
-from ikomia.dataprocess.workflow import Workflow
-
-# Init your workflow
-wf = Workflow()
-
-# Add algorithm
-algo = wf.add_task(name="dataset_coco", auto_connect=True)
-
-# Run on your image  
-wf.run_on(url="example_image.png")
-
-# Iterate over outputs
-for output in algo.get_outputs()
-    # Print information
-    print(output)
-    # Export it to JSON
-    output.to_json()
-```
-
-## :fast_forward: Advanced usage 
-
-[optional]
