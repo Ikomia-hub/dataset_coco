@@ -137,15 +137,10 @@ class DatasetCocoFactory(dataprocess.CTaskFactory):
         # Set process information as string here
         self.info.name = "dataset_coco"
         self.info.short_description = "Load COCO 2017 dataset"
-        self.info.description = "Load COCO 2017 dataset. " \
-                                "This plugin converts a given dataset in COCO 2017 format to Ikomia format. " \
-                                "Once loaded, all images can be visualized with their respective annotations. " \
-                                "Then, any training algorithms from the Ikomia marketplace can be connected " \
-                                "to this converter."
         self.info.authors = "Ikomia team"
         self.info.license = "MIT License"
         self.info.documentation_link = "https://cocodataset.org/"
-        self.info.repo = "https://github.com/Ikomia-dev"
+        self.info.repository = "https://github.com/Ikomia-hub/dataset_coco"
         # relative path -> as displayed in Ikomia application process tree
         self.info.path = "Plugins/Python/Dataset"
         self.info.icon_path = "icons/coco.jpg"
