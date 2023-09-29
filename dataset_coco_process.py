@@ -146,6 +146,8 @@ class DatasetCocoFactory(dataprocess.CTaskFactory):
         self.info.icon_path = "icons/coco.jpg"
         self.info.version = "1.2.1"
         self.info.keywords = "coco,dataset,annotation,json,train,dnn"
+        self.info.algo_type = core.AlgoType.DATASET
+        self.info.algo_tasks = "OBJECT_DETECTION,INSTANCE_SEGMENTATION,SEMANTIC_SEGMENTATION,PANOPTIC_SEGMENTATION,KEYPOINTS_DETECTION,IMAGE_CAPTIONING"
 
     def create(self, param=None):
         # Create process object
