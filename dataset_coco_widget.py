@@ -40,17 +40,22 @@ class DatasetCocoWidget(core.CWorkflowTaskWidget):
         # Create layout : QGridLayout by default
         self.grid_layout = QGridLayout()
 
-        self.browse_json = pyqtutils.append_browse_file(self.grid_layout, label="COCO json file",
-                                                        path=self.parameters.json_file, filter="*.json")
+        self.browse_json = pyqtutils.append_browse_file(self.grid_layout,
+                                                        label="COCO json file",
+                                                        path=self.parameters.json_file,
+                                                        file_filter="*.json")
 
-        self.browse_img_folder = pyqtutils.append_browse_file(self.grid_layout, label="Image folder", filter="",
+        self.browse_img_folder = pyqtutils.append_browse_file(self.grid_layout,
+                                                              label="Image folder",
+                                                              file_filter="",
                                                               path=self.parameters.image_folder,
                                                               mode=QFileDialog.Directory)
         self.combo_task = pyqtutils.append_combo(self.grid_layout, "Task")
         self.combo_task.addItems(["detection", "instance_segmentation", "semantic_segmentation", "keypoints"])
         self.combo_task.setCurrentText(self.parameters.task)
-        self.browse_output_folder = pyqtutils.append_browse_file(self.grid_layout, label="Output folder "
-                                                                                         "(sem. segm.)", filter="",
+        self.browse_output_folder = pyqtutils.append_browse_file(self.grid_layout,
+                                                                 label="Output folder (sem. segm.)",
+                                                                 file_filter="",
                                                                  path=self.parameters.output_folder,
                                                                  mode=QFileDialog.Directory)
         self.combo_task.currentTextChanged.connect(self.on_combo_task_changed)
