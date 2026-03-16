@@ -145,6 +145,10 @@ class DatasetCocoFactory(dataprocess.CTaskFactory):
         self.info.path = "Plugins/Python/Dataset"
         self.info.icon_path = "icons/coco.jpg"
         self.info.version = "1.3.0"
+        # Ikomia API compatibility (Qt6)
+        self.info.min_ikomia_version = "0.16.0"
+        # Python compatibility
+        self.info.min_python_version = "3.10.0"
         self.info.keywords = "coco,dataset,annotation,json,train,dnn"
         self.info.algo_type = core.AlgoType.DATASET
         self.info.algo_tasks = "OBJECT_DETECTION,INSTANCE_SEGMENTATION,SEMANTIC_SEGMENTATION,PANOPTIC_SEGMENTATION,KEYPOINTS_DETECTION,IMAGE_CAPTIONING"
