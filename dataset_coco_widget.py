@@ -1,26 +1,11 @@
-# Copyright (C) 2021 Ikomia SAS
-# Contact: https://www.ikomia.com
-#
-# This file is part of the IkomiaStudio software.
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# PyQt GUI framework
+from PyQt6.QtWidgets import *
 
 from ikomia import utils, core, dataprocess
 from ikomia.utils import pyqtutils, qtconversion
+
 from dataset_coco.dataset_coco_process import DatasetCocoParam
-# PyQt GUI framework
-from PyQt5.QtWidgets import *
+
 
 
 # --------------------
@@ -49,7 +34,7 @@ class DatasetCocoWidget(core.CWorkflowTaskWidget):
                                                               label="Image folder",
                                                               file_filter="",
                                                               path=self.parameters.image_folder,
-                                                              mode=QFileDialog.Directory)
+                                                              mode=QFileDialog.FileMode.Directory)
         self.combo_task = pyqtutils.append_combo(self.grid_layout, "Task")
         self.combo_task.addItems(["detection", "instance_segmentation", "semantic_segmentation", "keypoints"])
         self.combo_task.setCurrentText(self.parameters.task)
@@ -57,7 +42,7 @@ class DatasetCocoWidget(core.CWorkflowTaskWidget):
                                                                  label="Output folder (sem. segm.)",
                                                                  file_filter="",
                                                                  path=self.parameters.output_folder,
-                                                                 mode=QFileDialog.Directory)
+                                                                 mode=QFileDialog.FileMode.Directory)
         self.combo_task.currentTextChanged.connect(self.on_combo_task_changed)
         self.browse_output_folder.setVisible(self.combo_task.currentText() == "semantic_segmentation")
 
